@@ -49,6 +49,7 @@ RUN wget -O /root/.terraform.d/plugins/terraform-provisioner-ansible_v$ANSIBLE_P
     chmod +x /root/.terraform.d/plugins/terraform-provisioner-ansible_v$ANSIBLE_PROVISIONER_VERSION &&\
     apk add --update --no-cache \
         openssh \
+        gettext \
         ansible \
         py-pip \
         py-netaddr &&\
