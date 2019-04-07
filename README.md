@@ -2,7 +2,8 @@
 
 This Docker images is basen on the official `hashicorp/terraform:light` Terraform image and extends it with the [Terraform AWS Provider](https://github.com/terraform-providers/terraform-provider-aws/releases) and [Ansible Provisioner by radekg](https://github.com/radekg/terraform-provisioner-ansible).
 
-**It is intended for the use as base image for [GitLab CI pipelines](https://docs.gitlab.com/ce/ci/quick_start/README.html).** You can read my full article on about how to use the image [on Medium.com](https://medium.com/@robinflume/about-infrastructure-on-aws-automated-with-terraform-ansible-and-gitlab-ci-5888fe2e85fc).
+**It is intended for the use as base image for [GitLab CI pipelines](https://docs.gitlab.com/ce/ci/quick_start/README.html).** You can read my full article about how to use the image on Medium.com: [About Infrastructure on AWS, Automated with Terraform, Ansible and GitLab CI](https://medium.com/@robinflume/about-infrastructure-on-aws-automated-with-terraform-ansible-and-gitlab-ci-5888fe2e85fc).
+
 The image is build as [Docker Multi-Stage Build](https://docs.docker.com/develop/develop-images/multistage-build/), which required Docker Engine `v17.05` or higher.
 
 ## Default Versions
