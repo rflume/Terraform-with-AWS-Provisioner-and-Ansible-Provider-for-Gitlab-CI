@@ -56,8 +56,7 @@ variables:
 
 # Create files w/ required the secrets
 before_script:
-  - echo "$ID_RSA" > /root/.ssh/id_rsa_terraform
-  - chmod 600 /root/.ssh/id_rsa_terraform
+  - echo "$ID_RSA_TERRAFORM" > /root/.ssh/id_rsa_terraform
   - echo "$ANSIBLE_VAULT_PASS" > /etc/ansible/vault_password_file
   - echo "$ANSIBLE_BECOME_PASS" > /etc/ansible/become_pass
 
