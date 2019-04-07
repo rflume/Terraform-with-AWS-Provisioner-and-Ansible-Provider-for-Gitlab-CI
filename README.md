@@ -109,28 +109,31 @@ apply:dev:
 The above pipeline works for the following project layout:
 
 ```text
-├── .git
 ├── ansible-provisioning
 │ └── roles
 │   └── my-global-role
 │     └── ...
+│
 ├── global
 │   ├── files
 │   │ └── user_data.sh
 │   └── {main|outputs|terraform|vars}.tf
+│
 ├── environments
 │ ├── dev
 │ │ └── {main|outputs|terraform|vars}.tf
 │ ├── stage
 │ │ └── {main|outputs|terraform|vars}.tf
-│ ├── prod
-│ │ └── {main|outputs|terraform|vars}.tf
+│ └── prod
+│   └── {main|outputs|terraform|vars}.tf
+│
 ├── modules
-│ ├── my_module
-│ │ ├── ansible
-| │ │ └── playbook
-| | │   └── …
-│ │ ├── {main|outputs|terraform|vars}.tf
+│ └── my_module
+│   ├── ansible
+|   │ └── playbook
+|   │   └── …
+│   └── {main|outputs|terraform|vars}.tf
+│
 ├── .gitlab-ci.yml
 └── README.md
 ```
@@ -149,7 +152,7 @@ resource "aws_instance" "default" {
    ...
    associate_public_ip_address = true
    key_name = "${data.terraform_remote_state.global.ssh_pubkey}"
-   # ignore user_data update, as this will require a new resource!
+   # ignore user_data updates, as this will require a new resource!
    lifecycle {
      ignore_changes = [
        "user_data",
@@ -166,7 +169,7 @@ resource "null_resource" "default_provisioner" {
   connection {
     host = "${aws_instance.default.public_ip}"
     type = "ssh"
-    user = "terraform" # as created in 'user_data'
+    user = "terraform"   # as created in 'user_data'
     private_key = "${file("/root/.ssh/id_rsa_terraform")}"
   }
   # wait for the instance to become available
@@ -175,7 +178,6 @@ resource "null_resource" "default_provisioner" {
       "echo 'ready'"
     ]
   }
-
   # ansible provisioner
   provisioner "ansible" {
     plays {
