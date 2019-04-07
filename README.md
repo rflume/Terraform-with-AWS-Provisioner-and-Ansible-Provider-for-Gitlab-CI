@@ -2,8 +2,7 @@
 
 This Docker images is basen on the official `hashicorp/terraform:light` Terraform image and extends it with the [Terraform AWS Provider](https://github.com/terraform-providers/terraform-provider-aws/releases) and [Ansible Provisioner by radekg](https://github.com/radekg/terraform-provisioner-ansible).
 
-**It is intended for the use as base image for [GitLab CI pipelines](https://docs.gitlab.com/ce/ci/quick_start/README.html).** You can read my full article on about how to use the image [on Medium.com](...). <!-- LINK TO BE ADDED! -->
-
+**It is intended for the use as base image for [GitLab CI pipelines](https://docs.gitlab.com/ce/ci/quick_start/README.html).** You can read my full article on about how to use the image [on Medium.com](https://medium.com/@robinflume/about-infrastructure-on-aws-automated-with-terraform-ansible-and-gitlab-ci-5888fe2e85fc).
 The image is build as [Docker Multi-Stage Build](https://docs.docker.com/develop/develop-images/multistage-build/), which required Docker Engine `v17.05` or higher.
 
 ## Default Versions
@@ -35,7 +34,7 @@ These must be provided as Gitlab CI secrets (project environment variables):
 * `ANSIBLE_VAULT_PASS`: The password the decrypt the [Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html) (optional)
 * `AWS_ACCESS_KEY_ID`: An AWS access key id to be used by the AWS provider
 * `AWS_SECRET_ACCESS_KEY`: An AWS secret key to be used by the AWS provider
-* `ID_RSA`: An SSH private key to be used by Ansible
+* `ID_RSA_TERRAFORM`: An SSH private key to be used by Ansible
 
 ## The Gitlab CI Pipeline Configuration
 
@@ -50,10 +49,6 @@ stages:
   - validate dev
   - plan dev
   - apply dev
-  # Prod environment stages
-  - validate prod
-  - plan prod
-  - apply prod
 
 variables:
   AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
@@ -61,21 +56,18 @@ variables:
 
 # Create files w/ required the secrets
 before_script:
-  - echo "$ID_RSA" > /root/.ssh/id_rsa
+  - echo "$ID_RSA" > /root/.ssh/id_rsa_terraform
   - chmod 600 /root/.ssh/id_rsa_terraform
   - echo "$ANSIBLE_VAULT_PASS" > /etc/ansible/vault_password_file
-  - chmod 0600 /etc/ansible/vault_password_file
   - echo "$ANSIBLE_BECOME_PASS" > /etc/ansible/become_pass
-  - chmod 0666 /etc/ansible/become_pass
 
 # Apply Terraform on DEV environment
 validate:dev:
   stage: validate dev
   script:
     - cd environments/dev
-    - terraform init -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"
+    - terraform init
     - terraform validate
-    - cd ../..
   only:
     changes:
       - environments/dev/**/*
@@ -85,9 +77,8 @@ plan:dev:
   stage: plan dev
   script:
     - cd environments/dev
-    - terraform init -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"
+    - terraform init
     - terraform plan -out "planfile_dev"
-    - cd ../..
   artifacts:
     paths:
       - environments/dev/planfile_dev
@@ -100,9 +91,8 @@ apply:dev:
   stage: apply dev
   script:
     - cd environments/dev
-    - terraform init -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"
+    - terraform init
     - terraform apply -input=false "planfile_dev"
-    - cd ../..
   dependencies:
     - plan:dev
   allow_failure: false
@@ -112,102 +102,37 @@ apply:dev:
     changes:
       - environments/dev/**/*
       - modules/**/*
-
-
-# Apply Terraform on PROD environment
-validate:prod:
-  stage: validate prod
-  script:
-    - cd environments/prod
-    - terraform init -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"
-    - terraform validate
-    - cd ../..
-  only:
-    changes:
-      - environments/prod/**/*
-      - modules/**/*
-
-plan:prod:
-  stage: plan prod
-  script:
-    - cd environments/prod
-    - terraform init -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"
-    - terraform plan -out "planfile_prod"
-    - cd ../..
-    - echo "CHANGES WON'T BE APPLIED UNLESS MERGED INTO BRANCH 'MASTER'! PLEASE CREATE A MERGE REQUEST..."
-  artifacts:
-    paths:
-      - environments/prod/planfile_prod
-  only:
-    changes:
-      - environments/prod/**/*
-      - modules/**/*
-
-apply:prod:
-  stage: apply prod
-  script:
-    - cd environments/prod
-    - terraform init -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"
-    - terraform apply -input=false "planfile_prod"
-    - cd ../..
-  dependencies:
-    - plan:prod
-  when: manual
-  allow_failure: false
-  only:
-    refs:
-      - master
-    changes:
-      - environments/prod/**/*
-      - modules/**/*
 ```
-
-This pipeline required the manual confirmation of the changes, as defined by `when: manual`.
 
 ### Project Layout
 
 The above pipeline works for the following project layout:
 
 ```text
-projects/automation/terraform
 ├── .git
 ├── ansible-provisioning
-│   └── roles
-│       ├── my-general-role
-│       │   ├── files
-│       │   │   └── ...
-│       │   ├── tasks
-│       │   │   └── main.yml
-│       │   └── templates
-│       │       └── ...
+│ └── roles
+│   └── my-global-role
+│     └── ...
+├── global
+│   ├── files
+│   │ └── user_data.sh
+│   └── {main|outputs|terraform|vars}.tf
 ├── environments
-│   ├── dev
-│   │   ├── files
-│   │   │   └── user_data.sh
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   ├── terraform.tf
-│   │   └── vars.tf
-│   ├── prod
-│   │   └── ...
+│ ├── dev
+│ │ └── {main|outputs|terraform|vars}.tf
+│ ├── stage
+│ │ └── {main|outputs|terraform|vars}.tf
+│ ├── prod
+│ │ └── {main|outputs|terraform|vars}.tf
 ├── modules
-│   ├── my_module
-│   │   ├── ansible
-│   │   │   └── playbook
-│   │   │       ├── group_vars
-│   │   │       │   └── all
-│   │   │       │       └── vault
-│   │   │       ├── roles
-│   │   │       │   └── playbook-specific-role
-│   │   │       │       ├── tasks
-│   │   │       │       │   └── main.yml
-│   │   │       └── playbook.yml
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   ├── terraform.tf
-│   │   └── vars.tf
+│ ├── my_module
+│ │ ├── ansible
+| │ │ └── playbook
+| | │   └── …
+│ │ ├── {main|outputs|terraform|vars}.tf
 ├── .gitlab-ci.yml
-└── ...
+└── README.md
 ```
 
 ### Ansible Provisioning
@@ -219,9 +144,17 @@ This is a brief example on how to use Ansible provisioning with this Docker imag
 ```t
 # ec2 instance
 resource "aws_instance" "default" {
-  ...
-  user_data = "${var.user_data}" # within the userdata, a terraform user is created on the instance as which Ansible will connect ($ID_RSA is it's respective private key)
-  ...
+   ...
+   user_data = "${data.terraform_remote_state.global.user_data}"
+   ...
+   associate_public_ip_address = true
+   key_name = "${data.terraform_remote_state.global.ssh_pubkey}"
+   # ignore user_data update, as this will require a new resource!
+   lifecycle {
+     ignore_changes = [
+       "user_data",
+     ]
+   }
 }
 
 # instance provisioner
@@ -231,18 +164,15 @@ resource "null_resource" "default_provisioner" {
   }
 
   connection {
-    host        = "${aws_instance.default.public_ip}"       # use the 'aws_eip.[...].public_ip if an EIP is assigned to the instance!
-    type        = "ssh"
-    user        = "terraform"                               # as created in 'user_data'
-    private_key = "${file("/root/.ssh/id_rsa_terraform")}"  # created from projects env vars in the 'before_script' section of the pipline
+    host = "${aws_instance.default.public_ip}"
+    type = "ssh"
+    user = "terraform" # as created in 'user_data'
+    private_key = "${file("/root/.ssh/id_rsa_terraform")}"
   }
-
-  # set hostname
+  # wait for the instance to become available
   provisioner "remote-exec" {
     inline = [
-      "echo '${file("/etc/ansible/become_pass")}' | sudo -S su",
-      "echo '127.0.0.1 ${aws_instance.default.tags.Name}' | sudo tee -a /etc/hosts",
-      "sudo hostnamectl set-hostname ${aws_instance.default.tags.Name}",
+      "echo 'ready'"
     ]
   }
 
@@ -250,31 +180,22 @@ resource "null_resource" "default_provisioner" {
   provisioner "ansible" {
     plays {
       playbook = {
-        file_path = "${path.module}/ansible/playbook/playbook.yml"
-
+        file_path = "${path.module}/ansible/playbook/main.yml"
         roles_path = [
-          "${path.module}/../../../../../ansible-provisioning/roles", # Looks weird, feels weird, but is required as the module's base path is within '.terraform/.../.../.../'!
+          "${path.module}/../../../../../ansible-provisioning/roles",
         ]
       }
+    hosts = ["${aws_instance.default.public_ip}"]
+    become = true
+    become_method = "sudo"
+    become_user = "root"
 
-      hosts         = ["${aws_instance.default.public_ip}"]         # possibly aws_eip.default.public_ip
-      become        = true
-      become_method = "sudo"
-      become_user   = "root"
-
-      extra_vars = {
-        ...
-        ansible_become_pass = "${file("/etc/ansible/become_pass")}" # created from projects env vars in the 'before_script' section of the pipline
-      }
-
-      vault_password_file = "/etc/ansible/vault_password_file"      # created from projects env vars in the 'before_script' section of the pipline
+    extra_vars = {
+      ...
+      ansible_become_pass = "${file("/etc/ansible/become_pass")}"
     }
 
-    ansible_ssh_settings {
-      connect_timeout_seconds = 20
-      connection_attempts     = 3
-      ssh_keyscan_timeout     = 60
-    }
+    vault_password_file = "/etc/ansible/vault_password_file"
   }
 }
 ```
