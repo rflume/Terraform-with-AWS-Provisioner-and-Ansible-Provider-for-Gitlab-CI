@@ -4,11 +4,11 @@ This Docker images is based on the official `hashicorp/terraform:0.11.13` Terraf
 
 **It is intended for the use as base image for [GitLab CI pipelines](https://docs.gitlab.com/ce/ci/quick_start/README.html).** You can read my full article on how to use the image at Medium.com: [About Infrastructure on AWS, Automated with Terraform, Ansible and GitLab CI](https://medium.com/@robinflume/about-infrastructure-on-aws-automated-with-terraform-ansible-and-gitlab-ci-5888fe2e85fc).
 
-The image is build as [Docker Multi-Stage Build](https://docs.docker.com/develop/develop-images/multistage-build/), which requires Docker Engine `v17.05` or higher.
+*The image is build as [Docker Multi-Stage Build](https://docs.docker.com/develop/develop-images/multistage-build/). This feature requires Docker Engine `v17.05` or higher.*
 
 ## Default Versions
 
-The image needs to be build with Docker `build-args`, which default to the following versions:
+The image needs to be build with Docker `build-args` which default to the following versions:
 
 * Terraform: `0.11.13`
 * AWS Provisioner: `2.6.0`
@@ -17,7 +17,7 @@ The image needs to be build with Docker `build-args`, which default to the follo
 You can overwrite the versions of both the AWS Provisioner and the Ansible Provider within the `docker build` command:
 
 ```bash
-docker build -t terraform-aws-ansible --build-arg AWS_PROVIDER_VERSION=2.1.1 --build-arg ANSIBLE_PROVISIONER_VERSION=2.1.1 .
+docker build -t terraform-aws-ansible --build-arg AWS_PROVIDER_VERSION=2.5.0 --build-arg ANSIBLE_PROVISIONER_VERSION=2.1.1 .
 ```
 
 Available versions can be found here:
