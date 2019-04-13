@@ -34,7 +34,7 @@ RUN make build
 # Build the actual image
 FROM hashicorp/terraform:0.11.13
 
-ARG AWS_PROVIDER_VERSION=2.5.0
+ARG AWS_PROVIDER_VERSION=2.6.0
 ARG ANSIBLE_PROVISIONER_VERSION=2.2.0
 
 ENV GOBIN /root/go/bin
