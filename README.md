@@ -1,10 +1,10 @@
 # Terraform with AWS Provider and Ansible Provisioner for Gitlab CI
 
-This Docker images is basen on the official `hashicorp/terraform:0.11.13` Terraform image (light) and extends it with the [Terraform AWS Provider](https://github.com/terraform-providers/terraform-provider-aws/releases) and [Ansible Provisioner by radekg](https://github.com/radekg/terraform-provisioner-ansible).
+This Docker images is based on the official `hashicorp/terraform:0.11.13` Terraform image and extends it with the [Terraform AWS Provider](https://github.com/terraform-providers/terraform-provider-aws/releases) and [Ansible Provisioner by radekg](https://github.com/radekg/terraform-provisioner-ansible).
 
-**It is intended for the use as base image for [GitLab CI pipelines](https://docs.gitlab.com/ce/ci/quick_start/README.html).** You can read my full article about how to use the image on Medium.com: [About Infrastructure on AWS, Automated with Terraform, Ansible and GitLab CI](https://medium.com/@robinflume/about-infrastructure-on-aws-automated-with-terraform-ansible-and-gitlab-ci-5888fe2e85fc).
+**It is intended for the use as base image for [GitLab CI pipelines](https://docs.gitlab.com/ce/ci/quick_start/README.html).** You can read my full article on how to use the image at Medium.com: [About Infrastructure on AWS, Automated with Terraform, Ansible and GitLab CI](https://medium.com/@robinflume/about-infrastructure-on-aws-automated-with-terraform-ansible-and-gitlab-ci-5888fe2e85fc).
 
-The image is build as [Docker Multi-Stage Build](https://docs.docker.com/develop/develop-images/multistage-build/), which required Docker Engine `v17.05` or higher.
+The image is build as [Docker Multi-Stage Build](https://docs.docker.com/develop/develop-images/multistage-build/), which requires Docker Engine `v17.05` or higher.
 
 ## Default Versions
 
@@ -20,14 +20,14 @@ You can overwrite the versions of both the AWS Provisioner and the Ansible Provi
 docker build -t terraform-aws-ansible --build-arg AWS_PROVIDER_VERSION=2.1.1 --build-arg ANSIBLE_PROVISIONER_VERSION=2.1.1 .
 ```
 
-The availailable versions can be found here:
+Available versions can be found here:
 
 * [AWS Provider Versions](https://github.com/terraform-providers/terraform-provider-aws/releases)
 * [Ansible Provisioner Versions](https://github.com/radekg/terraform-provisioner-ansible/releases)
 
 ## Required Secrets
 
-The image can be used to automate your Infrastructure creation with Gitlab CI pipelines. It is therefor required to provide both AWS credentials and login data of the user that the Ansible provisioner uses.
+The image can be used to automate your infrastructure creation with Gitlab CI pipelines. It is therefor required to provide both AWS credentials and login data of the user that the Ansible provisioner uses.
 
 These must be provided as Gitlab CI secrets (project environment variables):
 
@@ -39,7 +39,7 @@ These must be provided as Gitlab CI secrets (project environment variables):
 
 ## The Gitlab CI Pipeline Configuration
 
-Tha actual pipeline can be configures as shown in this example:
+The actual pipeline can be configured as shown in this example:
 
 ```yml
 image:
