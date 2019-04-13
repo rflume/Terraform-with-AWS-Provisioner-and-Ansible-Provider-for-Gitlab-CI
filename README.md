@@ -11,8 +11,8 @@ The image is build as [Docker Multi-Stage Build](https://docs.docker.com/develop
 The image needs to be build with Docker `build-args`, which default to the following versions:
 
 * Terraform: `latest` (depends on the Terraform version of `hashicorp/terraform:light`)
-* AWS Provisioner: `2.5.0`
-* Ansible Provisioner: `2.1.2`
+* AWS Provisioner: `2.6.0`
+* Ansible Provisioner: `2.2.0`
 
 You can overwrite the versions of both the AWS Provisioner and the Ansible Provider within the `docker build` command:
 
