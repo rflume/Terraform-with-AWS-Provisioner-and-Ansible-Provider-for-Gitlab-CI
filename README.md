@@ -15,6 +15,7 @@ This Docker images is based on the official `hashicorp/terraform:0.11.13` Terraf
   * [Project Layout](#project-layout)
   * [Ansible Provisioning](#ansible-provisioning)
   * [Gitlab CI Pipeline Configuration](#gitlab-ci-pipeline-configuration)
+* [Software Licenses](#software-licenses)
 
 ## Docker Tags
 
@@ -224,3 +225,12 @@ apply:dev:
       - environments/dev/**/*
       - modules/**/*
 ```
+
+## Software Licenses
+
+Note that the software included in the Docker image underlies licenses that may differ from the one for this Dockerfile / Docker image.<br/>
+To view them, follow these links:
+
+* [Terraform License](https://github.com/hashicorp/terraform/blob/master/LICENSE)
+* [Terraform AWS Provider License](https://github.com/terraform-providers/terraform-provider-aws/blob/master/LICENSE)
+* [Terraform Provisioner Ansible License](https://github.com/radekg/terraform-provisioner-ansible/blob/master/LICENSE)
