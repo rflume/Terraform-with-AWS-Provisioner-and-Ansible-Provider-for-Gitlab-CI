@@ -4,7 +4,7 @@ This Docker images is based on the official `hashicorp/terraform:0.11.13` Terraf
 
 **It is intended for the use as base image for [GitLab CI pipelines](https://docs.gitlab.com/ce/ci/quick_start/README.html).** You can read my full article on how to use the image at Medium.com: [About Infrastructure on AWS, Automated with Terraform, Ansible and GitLab CI](https://medium.com/@robinflume/about-infrastructure-on-aws-automated-with-terraform-ansible-and-gitlab-ci-5888fe2e85fc).
 
-^The image is build as [Docker Multi-Stage Build](https://docs.docker.com/develop/develop-images/multistage-build/). This feature requires Docker Engine `v17.05` or higher.*
+The image is build as [Docker Multi-Stage Build](https://docs.docker.com/develop/develop-images/multistage-build/). This feature requires Docker Engine `v17.05` or higher.*
 
 ## Table of Contents
 
@@ -15,6 +15,7 @@ This Docker images is based on the official `hashicorp/terraform:0.11.13` Terraf
   * [Project Layout](#project-layout)
   * [Ansible Provisioning](#ansible-provisioning)
   * [Gitlab CI Pipeline Configuration](#gitlab-ci-pipeline-configuration)
+* [Software Licenses](#software-licenses)
 
 ## Docker Tags
 
@@ -224,3 +225,12 @@ apply:dev:
       - environments/dev/**/*
       - modules/**/*
 ```
+
+## Software Licenses
+
+Note that the software included in the Docker image underlies licenses that may differ from the one for this Dockerfile / Docker image.<br/>
+To view them, follow these links:
+
+* [Terraform License](https://github.com/hashicorp/terraform/blob/master/LICENSE)
+* [Terraform AWS Provider License](https://github.com/terraform-providers/terraform-provider-aws/blob/master/LICENSE)
+* [Terraform Provisioner Ansible License](https://github.com/radekg/terraform-provisioner-ansible/blob/master/LICENSE)
