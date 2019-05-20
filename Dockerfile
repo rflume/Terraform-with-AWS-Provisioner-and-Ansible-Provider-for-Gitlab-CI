@@ -4,7 +4,7 @@
 # Build AWS provider
 FROM ubuntu:xenial as builder
 
-ARG AWS_PROVIDER_VERSION=2.9.0
+ARG AWS_PROVIDER_VERSION=2.11.0
 
 ENV HOME /root
 ENV GOPATH $HOME/go
@@ -32,9 +32,9 @@ RUN make build
 
 
 # Build the actual image
-FROM hashicorp/terraform:0.11.13
+FROM hashicorp/terraform:0.11.14
 
-ARG AWS_PROVIDER_VERSION=2.9.0
+ARG AWS_PROVIDER_VERSION=2.11.0
 ARG ANSIBLE_PROVISIONER_VERSION=2.2.0
 
 ENV GOBIN /root/go/bin
