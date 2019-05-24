@@ -1,6 +1,6 @@
 # Terraform with AWS Provider and Ansible Provisioner for Gitlab CI
 
-**Important Note: Terraform 0.12 has been officially released! However, due to the required efforts to upgrade from v0.11 to v0.12, the tag `latest` will for the first remain using v0.11! I recommend using a specified image tag instead of `latest` to ensure to always use the Terraform version you need!**
+**Important Note: Terraform 0.12 has been officially released! However, due to the required efforts to upgrade from v0.11 to v0.12, the tag `latest` will for the first remain being based on v0.11! I recommend using a specified image tag instead of `latest` to ensure to always use the Terraform version you need! To use Terraform v0.12, please use the tag `tf-0.12.XX`. Note that the v0.12 image is yet untested, so please file an issue if you encounter any bugs!**
 
 This Docker images is based on the official `hashicorp/terraform:0.11.14` Terraform image and extends it with the [Terraform AWS Provider](https://github.com/terraform-providers/terraform-provider-aws/releases) and [Ansible Provisioner by radekg](https://github.com/radekg/terraform-provisioner-ansible).
 
