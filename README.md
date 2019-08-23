@@ -33,7 +33,7 @@ If you need to pull images by the AWS Provider and Ansible Provisioner versions 
 The image needs to be build with Docker `build-args` which default to the following versions:
 
 * Terraform: `0.11.14`
-* AWS Provisioner: `2.22.0`
+* AWS Provisioner: `2.25.0`
 * Ansible Provisioner: `2.2.1`
 
 You can overwrite the versions of both the AWS Provisioner and the Ansible Provider within the `docker build` command:
