@@ -4,7 +4,7 @@
 
 **The tag `latest` will for the first remain using Terraform v0.11! However, to ensure always using the correct version please use the specific version tag!**
 
-This Docker images is based on the official **`hashicorp/terraform:0.12.6`** Terraform image and extends it with the [Terraform AWS Provider](https://github.com/terraform-providers/terraform-provider-aws/releases) and [Ansible Provisioner by radekg](https://github.com/radekg/terraform-provisioner-ansible).
+This Docker images is based on the official **`hashicorp/terraform:0.12.7`** Terraform image and extends it with the [Terraform AWS Provider](https://github.com/terraform-providers/terraform-provider-aws/releases) and [Ansible Provisioner by radekg](https://github.com/radekg/terraform-provisioner-ansible).
 
 **It is intended for the use as base image for [GitLab CI pipelines](https://docs.gitlab.com/ce/ci/quick_start/README.html).** You can read my full article on how to use the image at Medium.com: [About Infrastructure on AWS, Automated with Terraform, Ansible and GitLab CI](https://medium.com/@robinflume/about-infrastructure-on-aws-automated-with-terraform-ansible-and-gitlab-ci-5888fe2e85fc).
 
@@ -34,8 +34,8 @@ If you need to pull images by the AWS Provider and Ansible Provisioner versions 
 
 The image needs to be build with Docker `build-args` which default to the following versions:
 
-* Terraform: **`0.12.6`**
-* AWS Provisioner: `2.22.0`
+* Terraform: **`0.12.7`**
+* AWS Provisioner: `2.5.0`
 * Ansible Provisioner: `2.3.0`
 
 You can overwrite the versions of both the AWS Provisioner and the Ansible Provider within the `docker build` command:
