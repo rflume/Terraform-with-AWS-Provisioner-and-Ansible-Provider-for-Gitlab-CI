@@ -22,7 +22,7 @@ RUN apt-get update &&\
     mkdir -p $GOPATH/src/github.com/terraform-providers &&\
     wget -O $HOME/terraform-provider-aws.zip https://github.com/terraform-providers/terraform-provider-aws/archive/v$AWS_PROVIDER_VERSION.zip &&\
     cd $GOPATH/src/github.com/terraform-providers/ &&\
-    unzip $HOME/terraform-provider-aws.zip -q -d . &&\
+    unzip -q $HOME/terraform-provider-aws.zip -d . &&\
     mv terraform-provider-aws-$AWS_PROVIDER_VERSION \
        terraform-provider-aws
 
