@@ -18,7 +18,7 @@ RUN apt-get update &&\
                          build-essential &&\
     add-apt-repository ppa:longsleep/golang-backports &&\
     apt-get update &&\
-    apt-get install -y golang-go &&\
+    apt-get install -y golang-1.12 &&\
     mkdir -p $GOPATH/src/github.com/terraform-providers &&\
     wget -O $HOME/terraform-provider-aws.zip https://github.com/terraform-providers/terraform-provider-aws/archive/v$AWS_PROVIDER_VERSION.zip &&\
     cd $GOPATH/src/github.com/terraform-providers/ &&\
@@ -27,6 +27,9 @@ RUN apt-get update &&\
        terraform-provider-aws
 
 WORKDIR $GOPATH/src/github.com/terraform-providers/terraform-provider-aws
+
+# use binaries from specific installed version (1.12)
+ENV PATH "$PATH:/usr/lib/go-1.12/bin"
 
 RUN make build
 
