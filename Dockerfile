@@ -28,9 +28,6 @@ RUN apt-get update &&\
 
 WORKDIR $GOPATH/src/github.com/terraform-providers/terraform-provider-aws
 
-# use binaries from specific installed version (1.12)
-ENV PATH "$PATH:/usr/lib/go-1.12/bin"
-
 RUN make build
 
 
