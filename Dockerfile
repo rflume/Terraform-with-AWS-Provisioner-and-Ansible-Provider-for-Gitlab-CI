@@ -35,7 +35,7 @@ RUN make build
 
 
 # Build the actual image
-FROM hashicorp/terraform:0.12.9
+FROM hashicorp/terraform:0.12.16
 
 ARG AWS_PROVIDER_VERSION=2.39.0
 ARG ANSIBLE_PROVISIONER_VERSION=2.3.3
