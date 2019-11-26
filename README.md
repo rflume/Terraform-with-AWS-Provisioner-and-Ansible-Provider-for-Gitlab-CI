@@ -1,3 +1,5 @@
+![Docker Pulls](https://img.shields.io/docker/pulls/rflume/terraform-aws-ansible)
+
 # Terraform with AWS Provider and Ansible Provisioner for Gitlab CI
 
 **Important Note: Terraform 0.12 has been officially released! However, due to the required efforts to upgrade from v0.11 to v0.12, the tag `latest` will for the first remain being based on v0.11! I recommend using a specified image tag instead of `latest` to ensure to always use the Terraform version you need! To use Terraform v0.12, please use the tag `tf-0.12.XX`. Note that the v0.12 image is yet untested, so please file an issue if you encounter any bugs!**
@@ -33,7 +35,7 @@ If you need to pull images by the AWS Provider and Ansible Provisioner versions 
 The image needs to be build with Docker `build-args` which default to the following versions:
 
 * Terraform: `0.11.14`
-* AWS Provisioner: `2.29.0`
+* AWS Provisioner: `2.39.0`
 * Ansible Provisioner: `2.2.1`
 
 You can overwrite the versions of both the AWS Provisioner and the Ansible Provider within the `docker build` command:
